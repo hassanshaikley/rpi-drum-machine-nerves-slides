@@ -1,5 +1,5 @@
 {
-  "controls": true,
+  "controls": false,
   "progress": true,
   "auto-animate": true
 }

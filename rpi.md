@@ -1,7 +1,6 @@
 ---
 separator: <!--s-->
 verticalSeparator: <!--v-->
-theme: solarized
 revealOptions:
 transition: 'fade'
 ---

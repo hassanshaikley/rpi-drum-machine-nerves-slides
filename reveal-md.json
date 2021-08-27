@@ -1,5 +1,6 @@
 {
   "revealOptions": {
     "auto-animate": true
-  }
+  },
+  "controls": false
 }
