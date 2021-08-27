@@ -1,0 +1,9 @@
+/* May need to use important as this is injected at the top*/
+
+body {
+background: blue;
+}
+
+.progress {
+height: 10px !important;
+}
