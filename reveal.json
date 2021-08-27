@@ -1,5 +1,6 @@
 {
   "controls": false,
   "progress": true,
-  "auto-animate": true
+  "auto-animate": true,
+  "transition": "fade"
 }
