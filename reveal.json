@@ -2,5 +2,6 @@
   "controls": false,
   "progress": true,
   "auto-animate": true,
-  "transition": "fade"
+  "transition": "fade",
+  "transitionSpeed": "slow"
 }

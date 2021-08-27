@@ -10,6 +10,7 @@ transition: 'fade'
 ### Hassan Khan-Shaikley
 
 Twitter: @hassanshaikley
+
 Github: @hassanshaikley
 
 ---
@@ -19,14 +20,56 @@ Github: @hassanshaikley
 - plants
 - food
 - milk tea
+- tinkering
 - wife
+
+---
+
+# Hardware
+
+- RPI3
+- Official 7" Touchscreen
+- Audio Jack Mic
+- Power Supply
+- Micro SD Card
+
+---
+
+# Software
+
+- Nerves
+- Scenic
+- aplay (ships with scenic), afplay (local to mac)
 
 ---
 
 # Getting Started
 
+- Generator
 - Plug and play
 
 ---
 
-# [fit] ⌘+C ⌘+V = :v:
+# Sound output to jack
+
+`:os.cmd('amixer cset numid=3 1')`
+- 0: automatic
+- 1: analog (headphone jack)
+- 2: HDMI
+- 3: None 
+
+---
+
+# Changing volume
+
+`:os.cmd('amixer cset numid=1 #{percent}%')`
+
+---
+
+# Using static assets
+
+`priv/static` is accessed with `Path.join(:code.priv_dir(:drum_machine_nerves), "static")`
+
+---
+
+# Questions
