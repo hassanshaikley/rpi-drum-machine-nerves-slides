@@ -38,6 +38,7 @@ Github: @hassanshaikley
 - Official 7" Touchscreen
 - Audio Jack Mic
 - Power Supply
+	- 5.25V / 3A 
 - Micro SD Card
 
 ---
@@ -63,6 +64,10 @@ Github: @hassanshaikley
 
 ---
 
+![](img/scenic_starter.png)
+
+---
+
 # Sound output to jack
 
 `:os.cmd('amixer cset numid=3 1')`
@@ -82,6 +87,12 @@ Github: @hassanshaikley
 # Using static assets
 
 `priv/static` is accessed with `Path.join(:code.priv_dir(:drum_machine_nerves), "static")`
+
+---
+
+# Optimization
+
+- Benchee
 
 ---
 
