@@ -27,8 +27,8 @@ Github: @hassanshaikley
 
 # What is a Drum Machine
 
-![](drum_machine_mine.png)
-![](drum_machine_old.png)
+![](img/drum_machine_mine.png)
+![](img/drum_machine_old.png)
 
 ---
 
