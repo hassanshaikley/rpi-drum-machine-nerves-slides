@@ -27,8 +27,8 @@ Github: @hassanshaikley
 
 # What is a Drum Machine
 
-![](img/drum_machine_mine.png)
-![](img/drum_machine_old.png)
+<!-- ![](img/drum_machine_mine.png) -->
+![](img/drum_machine_old.jpg)
 
 ---
 
@@ -58,7 +58,7 @@ Github: @hassanshaikley
 
 # Getting Started
 
-- Generator
+- Getting Started With Nerves in Scenic docs
 - Plug and play
 
 ---
