@@ -43,10 +43,16 @@ Github: @hassanshaikley
 
 ---
 
+![](img/drum_machine.png)
+
+---
+
 # Software
 
 - Nerves
 - Scenic
+	- Supports cross platform compilation of UI
+	- Has an RPI Driver
 - aplay (ships with scenic), afplay (local to mac)
 
 ---
@@ -61,6 +67,15 @@ Github: @hassanshaikley
 
 - Getting Started With Nerves in Scenic docs
 - Plug and play
+
+---
+
+0. Plug in your SD card
+1. `mix scenic.new.nerves rpi_drum_machine_nerves`
+2. `cd rpi_drum_machine_nerves`
+3. `export MIX_TARGET=rpi3`
+4. `mix deps.get`
+5. the firmware burn command 
 
 ---
 
