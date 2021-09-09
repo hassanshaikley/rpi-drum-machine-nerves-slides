@@ -21,7 +21,14 @@ Github: @hassanshaikley
 - food
 - milk tea
 - tinkering
-- wife
+- spouse
+
+---
+
+# What is a Drum Machine
+
+![](drum_machine_mine.png)
+![](drum_machine_old.png)
 
 ---
 
@@ -40,6 +47,12 @@ Github: @hassanshaikley
 - Nerves
 - Scenic
 - aplay (ships with scenic), afplay (local to mac)
+
+---
+
+# Meatware
+
+- Yourself
 
 ---
 
