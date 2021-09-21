@@ -104,36 +104,77 @@ Github: @hassanshaikley
 ## Using static assets
 
 put wav files in `priv/static` 
-accessible at `Path.join(:code.priv_dir(:rpi_drum_machine_nerves), "static")`
+accessible at
+```
+priv_dir = :code.priv_dir(:rpi_drum_machine_nerves)
+Path.join(priv_dir, "static")`
+```
 
 ---
 
 ## Playing an audio file
 
-`path_to_audio_file = Path.join([:code.priv_dir(Application.get_application(__MODULE__)), "static", file])`
-
-`:os.cmd("aplay -q #{path_to_audio_file}")` 
-
+```
+application = Application.get_application(__MODULE__)
+priv_dir = :code.priv_dir(application)
+# top two lines equivalent to
+# priv_dir = :code.priv_dir(:rpi_drum_machine_nerves)
+path_to_audio_file = Path.join([priv_dir, "static", file])
+:os.cmd("aplay -q #{path_to_audio_file}") 
+```
 ---
-
-## Scenic UI Example
+## Scenic UI Example 1/3
 
 ```
-block
-o 
-code
+  @graph Graph.build(font: :roboto_mono, font_size: 16)
+         |> group(
+           fn graph ->
+             graph
+             |> button("-",
+               theme: %{
+                 text: :white,
+                 background: {100, 100, 100},
+                 active: {100, 200, 100},
+                 border: :black
+               },
+               id: :volume_down,
+               t: {40, -10 + 80},
+               height: 70,
+               width: 70
+             )
+           end,
+           t: {630, 300}
+         )
+```
+---
+
+## Scenic UI Example 2/3
+
+```
+
+def init(_, _opts) do
+  state = %{
+    graph: @graph
+  }
+
+  {:ok, state, push: state.graph}
+end
+
 ```
 
 ---
 
-## Scenic click/touch handling example
+## Scenic UI Example 3/3
 
-- String matching!!!!
--
+```
+root_graph
+|> VolumeControls.add_to_graph()
+```
+
 
 ---
 
-## Communicating between components 1/2
+## Events & Communicating between components 1/2
 
 ```
  def child_spec({args, opts}) do
@@ -153,6 +194,22 @@ code
 
 ---
 
+## Events & Communicating between components 2/2
+
+In the root component
+
+```
+  alias RpiDrumMachineNerves.Components.VolumeControls
+  ...
+  def filter_event({:click, :volume_down}, _context, state) do
+    new_volume = decrease_volume(state)
+    GenServer.cast(VolumeControls, {:update_volume, new_volume})
+    new_state = Map.put(state, :volume, new_volume)
+    {:noreply, new_state}
+  end
+```
+---
+
 ## Communicating between components 2/2
 
 ```
@@ -169,7 +226,7 @@ def handle_cast({:update_volume, new_volume}, state) do
 
 ---
 
-## Optimize CPU usage
+## Optimize CPU usage 1/4
 
 - Benchee
 - Follow performance best practices
@@ -178,6 +235,37 @@ def handle_cast({:update_volume, new_volume}, state) do
 	- a <> b 3x faster than "#{a}#{b} 
 		- Matching is 3x faster than <>
 	- === barely faster than ==
+
+---
+
+## Optimize CPU usage 2/4
+- Tried using ETS but it wasn't fast enough; there are some optimizations I still need to try
+- Leverage the 4 cores on the rpi3
+
+---
+
+## Optimize CPU usage 3/4
+- Cache pure functions at compile time by generating function heads that return the precalculated value
+- Top 2x faster, 0 mem usage vs 64B
+```
+  for n <- 0..100 do
+      @str "n is #{n}"
+      def volume_string(unquote(n)) do
+        @str
+      end
+  end
+```
+vs
+```
+  def volume_string(n) do
+    "The volume is now #{n}"
+  end
+```
+
+---
+## Optimize CPU usage 4/4
+
+- nifs
 
 ---
 
@@ -194,18 +282,21 @@ def handle_cast({:update_volume, new_volume}, state) do
 ## Don't optimize memory
 
 - Leverage memory to decrease CPU usage where you can
-- RPI3A's have 512
-	- Haven't run tests but still feels excessive
-- RPI3B's have 1GB
+  - RPI3A's have 512mb
+  - RPI3B's have 1GB
 
 ---
 
-## Source
+# Potential improvements
 
-github.com/hassanshaikley/rpi-drum-machine-nerves
-
+- Robotic arms
+- More accurate timing 
+  - mix new beats talk by Mat Trudel explores this
 
 ---
 
 ## Questions
+
+source: github.com/hassanshaikley/rpi-drum-machine-nerves
+
 
