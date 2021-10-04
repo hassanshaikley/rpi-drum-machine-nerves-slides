@@ -17,11 +17,12 @@ Github: @hassanshaikley
 
 ## Me
 
+- spouse
 - plants
 - food
-- milk tea
-- tinkering
-- spouse
+- tea
+- games
+- pets
 
 ---
 
@@ -50,10 +51,10 @@ Github: @hassanshaikley
 ## Software
 
 - Nerves
+	- aplay (ships with nerves), afplay (local to mac)
 - Scenic
 	- Supports cross platform compilation of UI
 	- Has an RPI Driver
-- aplay (ships with scenic), afplay (local to mac)
 
 ---
 
@@ -87,7 +88,9 @@ Github: @hassanshaikley
 
 ## Sound output to jack
 
-`:os.cmd('amixer cset numid=3 1')`
+`amixer cset numid=3 1'`
+
+`System.cmd("amixer", ["cset", "numid=3", "1"])`
 - 0: automatic
 - 1: analog (headphone jack)
 - 2: HDMI
@@ -97,7 +100,9 @@ Github: @hassanshaikley
 
 ## Changing volume
 
-`:os.cmd('amixer cset numid=1 #{percent}%')`
+`amixer cset numid=1 #{percent}%`
+
+`System.cmd("amixer", ["cset", "numid=3", "#{percent}%"])`
 
 ---
 
@@ -114,14 +119,11 @@ Path.join(priv_dir, "static")`
 
 ## Playing an audio file
 
-```
-application = Application.get_application(__MODULE__)
-priv_dir = :code.priv_dir(application)
-# top two lines equivalent to
-# priv_dir = :code.priv_dir(:rpi_drum_machine_nerves)
-path_to_audio_file = Path.join([priv_dir, "static", file])
-:os.cmd("aplay -q #{path_to_audio_file}") 
-```
+`aplay -q #{path_to_audio_file}`
+
+or
+
+`System.cmd("aplay", ["-q", path_to_audio_file])`
 ---
 ## Scenic UI Example 1/3
 
@@ -174,7 +176,7 @@ root_graph
 
 ---
 
-## Events & Communicating between components 1/2
+## Events & Communicating between components 1/3
 
 ```
  def child_spec({args, opts}) do
@@ -194,34 +196,31 @@ root_graph
 
 ---
 
-## Events & Communicating between components 2/2
+## Events & Communicating between components 2/3
 
-In the root component
+In the root component where we want to send messages
 
 ```
   alias RpiDrumMachineNerves.Components.VolumeControls
   ...
   def filter_event({:click, :volume_down}, _context, state) do
-    new_volume = decrease_volume(state)
-    GenServer.cast(VolumeControls, {:update_volume, new_volume})
-    new_state = Map.put(state, :volume, new_volume)
+    new_state = decrease_volume(state)
+    GenServer.cast(VolumeControls, {:update_volume, new_state.volume})
     {:noreply, new_state}
   end
 ```
 ---
 
-## Communicating between components 2/2
+## Events & Communicating between components 3/3
 
-```
-alias RpiDrumMachineNerves.Components.VolumeControls
+In the component we want to receive messages from
 
-...
-
-GenServer.cast(VolumeControls, {:update_volume, new_volume})
-```
-Then in that component
 ```
 def handle_cast({:update_volume, new_volume}, state) do
+  vol = Integer.to_string(new_volume)
+  graph = Graph.modify(state.graph, :volume_label, &text(&1, vol))
+  {:noreply, state, push: graph}
+end
 ```
 
 ---
@@ -246,7 +245,7 @@ def handle_cast({:update_volume, new_volume}, state) do
 
 ## Optimize CPU usage 3/4
 - Cache pure functions at compile time by generating function heads that return the precalculated value
-- Top 2x faster, 0 mem usage vs 64B
+  - Top 2x faster, 0 mem usage vs 64B
 ```
   for n <- 0..100 do
       @str "n is #{n}"
@@ -258,14 +257,16 @@ def handle_cast({:update_volume, new_volume}, state) do
 vs
 ```
   def volume_string(n) do
-    "The volume is now #{n}"
+    "n is #{n}"
   end
 ```
+Thank you Bryan Joseph for helping me accomplish this
 
 ---
 ## Optimize CPU usage 4/4
 
 - nifs
+![](img/great_power.jpeg)
 
 ---
 

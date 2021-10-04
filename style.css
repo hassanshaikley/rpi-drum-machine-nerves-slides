@@ -15,3 +15,10 @@ width: 1200px !important;
 .reveal pre code {
 max-height: inherit !important;
 }
+
+
+/* Great Power image */
+body > div.reveal.fade.center.focused.has-horizontal-slides.ready > div.slides > section.present > ul > li > img {
+max-width: 500px;
+display: block;
+}
