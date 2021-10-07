@@ -15,3 +15,9 @@
 -- Maybe tell it like a story, I tried x and it didn't work because of z, like the ets part
 
 -- Mention how you're into Arcade games and want to build one with Nerves one day
+
+-- Speaker cut out of picture
+-- Many pictures are at the very bottom
+-- Some text left aligned and some centered
+-- Maybe all code should be in ``` blocks better formatting I think
+-- Generally boring, needs more entertainment
