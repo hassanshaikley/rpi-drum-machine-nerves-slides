@@ -86,6 +86,15 @@ Github: @hassanshaikley
 
 ---
 
+## Spoiler Alert
+
+---
+
+![](img/drum_machine_mine_2.png)
+
+---
+
+
 ## Sound output to jack
 
 `amixer cset numid=3 1'`
@@ -125,7 +134,14 @@ or
 
 `System.cmd("aplay", ["-q", path_to_audio_file])`
 ---
-## Scenic UI Example 1/3
+
+## Scenic UI Example 1/4
+
+![](img/vol2.png)
+
+---
+
+## Scenic UI Example 2/4
 
 ```elixir
   @graph Graph.build(font: :roboto_mono, font_size: 16)
@@ -150,7 +166,7 @@ or
 ```
 ---
 
-## Scenic UI Example 2/3
+## Scenic UI Example 3/4
 
 ```elixir
 def init(_, _opts) do
@@ -164,7 +180,7 @@ end
 
 ---
 
-## Scenic UI Example 3/3
+## Scenic UI Example 4/4
 
 ```elixir
 root_graph
@@ -250,8 +266,8 @@ end
           graph,
           fn obj, graph ->
             graph
-            |> push_button.(obj, @width, @height, :up, up_color)
-            |> push_button.(obj, @width, @height, :down, down_color)
+            |> push_button.(obj, :up)
+            |> push_button.(obj, :down)
           end
         )
       end,
@@ -342,6 +358,39 @@ vs
 Thank you Bryan Joseph for helping me accomplish this
 
 ---
+
+```elixir
+    for n <- 0..100 do
+        @str "n is #{n}"
+        def volume_string(unquote(n)) do
+          @str
+        end
+    end
+```
+☝️ Generates👇
+```elixir
+    def volume_string(0) do
+      "n is 0"
+    end
+    def volume_string(0) do
+      "n is 1"
+    end
+    def volume_string(0) do
+      "n is 2"
+    end
+    ...
+    def volume_string(0) do
+      "n is 3"
+    end
+```
+And ☝️ is faster than 👇
+```elixir
+    def volume_string(n) do
+      "n is #{n}"
+    end
+```
+---
+
 ## Optimize CPU usage 4/4
 
 - nifs
@@ -372,6 +421,7 @@ Thank you Bryan Joseph for helping me accomplish this
 - Robotic arms
 - More accurate timing 
   - mix new beats talk by Mat Trudel explores this
+- fluidysynth & fhunleth/midi_synth
 
 ---
 
