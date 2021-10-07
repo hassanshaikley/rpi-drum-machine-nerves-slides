@@ -2,6 +2,7 @@
   "controls": false,
   "progress": true,
   "auto-animate": true,
-  "transition": "fade",
-  "transitionSpeed": "slow"
+  "transition": "slide",
+  "transitionSpeed": "slow",
+  "margin": 0.2
 }

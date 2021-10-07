@@ -1,17 +1,19 @@
 ---
+theme: white
 separator: <!--s-->
 verticalSeparator: <!--v-->
 revealOptions:
-transition: 'fade'
+template: template.html
 ---
 
-# How to Build a Drum Machine with Nerves
+## How to Build a Touch-Screen Drum Machine with Nerves
 
-### Hassan Khan-Shaikley
+#### Hassan Khan-Shaikley
 
-Twitter: @hassanshaikley
-
+<small>
+Twitter: @hassanshaikley &nbsp;
 Github: @hassanshaikley
+</small>
 
 ---
 
@@ -73,12 +75,14 @@ Github: @hassanshaikley
 
 ## Initializing the project
 
+```bash
 0. Plug in your SD card
-1. `mix scenic.new.nerves rpi_drum_machine_nerves`
-2. `cd rpi_drum_machine_nerves`
-3. `export MIX_TARGET=rpi3`
-4. `mix deps.get`
-5. `NERVES_SYSTEM=rpi3 mix firmware.burn` 
+1. mix scenic.new.nerves rpi_drum_machine_nerves
+2. cd rpi_drum_machine_nerves
+3. export MIX_TARGET=rpi3
+4. mix deps.get
+5. NERVES_SYSTEM=rpi3 mix firmware.burn
+```
 
 ---
 
