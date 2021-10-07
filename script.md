@@ -7,12 +7,12 @@ Hey everyone, my name is Hassan Khan Shaikley and I am here to talk to you about
 1 - ME
 
 So, about me:
-I've been married for almost 5 years now to the most amazing woman.
-I love to garden. Hydroponically and in the dirt.
+I've been married for almost 5 years to the most incredible woman I have ever met.
+I love to garden hydroponically and in the dirt.
 I love to eat and try different foods.
 Tea and Milk tea are my life. I drink way too much.
-I love to tinker. That sometimes includes making games and the drum machine is a lot like a game actually.
-I have 3 cats and a dog. I take my dog, Milo, almost everywhere with me.
+I love to tinker; that involves making all sorts of things.
+I have 3 cats and a dog. I take my small chihuahua, Milo, just about everywhere with me.
 
 2 - 
 
@@ -32,7 +32,7 @@ A rechargable audio jack speaker.
 And A 5.25v/3amp power supply.
 Altogether this was about $135.
 
-Note that raspberry PI 4 support isn't fully there due to it using a new driver. 
+Note that raspberry PI 4 support isn't fully there due to it requiring a new driver. 
 	[TODO: Confirm reasoning]
 
 4 - 
@@ -42,11 +42,11 @@ Assembly of the touchscreen is very straightforward. So far so good.
 5 -  SOFTWARE
 Nerves ships with aplay which allows you to play audio files. In our case we'll be playing wav files.
 
-Scenic is a library that allows you to write cross platform UI code. This means you can run scenic applications on different devices. I can run the UI on my macbook and on my raspberry pi 3 with the touchscreen.
+Scenic is a library that allows you to write cross platform UI code. This means you can run scenic applications on different devices. I can run the UI on my macbook and on my raspberry pi 3b with the touchscreen.
 
 Scenic's only dependencies are Erlang, OTP & OpenGl
 
-It has three layers. The Scene layer (which is wat we'll be working with). 
+It has three layers. The Scene layer (which is what we'll be working with). 
 
 Then there's the Viewport layer which is a bridge between the scenes and drivers. It controls the scenes life cycle and sends graphs to the drivers.
 
@@ -57,7 +57,7 @@ I heard this word for the first time in The Falcon and The Winter Soldier and ju
 
 
 GETTING STARTED
-It’s much simpler than I expected to get started. Scenic has documentation regarding using it with Nerves. And there's a scenic new library that will do the heavy lifting and output a simple starter project for the raspberry pi 3, or whatever target you tell it to.
+It's only a few short steps to get started. There's a scenic new library that will do the heavy lifting and output a simple starter Nerves project for the raspberry pi 3, or whatever target you tell it to. This is documented very well in the Scenic docs.
 
 INITIALIZING THE PROJECT
 
@@ -67,13 +67,15 @@ Create a scenic nerves project.
 Get the dependencies for the given target.
 Then, as long as you have an SD card plugged in you can burn the firmware into the SD card!
 
-If you punch in `iex -S mix` on your dev machine you'll see this. Which is also what you'll see on the RPI.
+And if you punch in `iex -S mix` on your dev machine you'll see this. Which is also what you'll see on the RPI.
+
+This was a lot of words but all we've done so far is run a generator and we have our hello world embedded scenic project.
 
 SOUND OUTPUT TO JACK
 
-The command at the top is essentially what you want to hit the command line with.
+The command at the top is essentially what you want to hit the command line with to set the target for the audio output.
 
-I've listed the different options, but I'm using a headphone jack speaker so I stick to analog.
+I've listed the various options, but I'm using a headphone jack speaker so I stick to analog.
 
 CHANGING VOLUME
 
