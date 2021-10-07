@@ -13,5 +13,8 @@
 -- If I could turn it into a story somehow I think that would be clutch
 
 
+- Remvoe image borders
+- See if title can stay at the top/  same pos of each slide
+
 Maybe
 -- Speaker cut out of picture
