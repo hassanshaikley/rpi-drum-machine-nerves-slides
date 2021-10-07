@@ -110,7 +110,7 @@ Github: @hassanshaikley
 
 put wav files in `priv/static` 
 accessible at
-```
+```elixir
 priv_dir = :code.priv_dir(:rpi_drum_machine_nerves)
 Path.join(priv_dir, "static")`
 ```
@@ -127,7 +127,7 @@ or
 ---
 ## Scenic UI Example 1/3
 
-```
+```elixir
   @graph Graph.build(font: :roboto_mono, font_size: 16)
          |> group(
            fn graph ->
@@ -152,8 +152,7 @@ or
 
 ## Scenic UI Example 2/3
 
-```
-
+```elixir
 def init(_, _opts) do
   state = %{
     graph: @graph
@@ -161,24 +160,22 @@ def init(_, _opts) do
 
   {:ok, state, push: state.graph}
 end
-
 ```
 
 ---
 
 ## Scenic UI Example 3/3
 
-```
+```elixir
 root_graph
 |> VolumeControls.add_to_graph()
 ```
-
 
 ---
 
 ## Events & Communicating between components 1/3
 
-```
+```elixir
  def child_spec({args, opts}) do
    # name allows us to communicate via the name
    start_opts = [__MODULE__, args, Keyword.put_new(opts, :name, __MODULE__)]
@@ -200,7 +197,7 @@ root_graph
 
 In the root component where we want to send messages
 
-```
+```elixir
   alias RpiDrumMachineNerves.Components.VolumeControls
   ...
   def filter_event({:click, :volume_down}, _context, state) do
@@ -215,12 +212,94 @@ In the root component where we want to send messages
 
 In the component we want to receive messages from
 
-```
+```elixir
 def handle_cast({:update_volume, new_volume}, state) do
   vol = Integer.to_string(new_volume)
   graph = Graph.modify(state.graph, :volume_label, &text(&1, vol))
   {:noreply, state, push: graph}
 end
+```
+
+---
+
+## Bread & Butter 1/5
+
+```elixir
+# List of tuples of {translation_x, translation_y, {x, y} = _id}
+@buttons Enum.map(0..(@num_cols - 1), fn x ->
+            Enum.map(0..(@num_rows - 1), fn y ->
+              {
+                (@width + @padding) * x, 
+                (@height + @padding) * y,
+                {x, y}
+              }
+            end)
+          end)
+          |> List.flatten()
+```
+
+---
+
+## Bread & Butter 2/5
+```elixir
+  @graph Graph.build()
+    |> group(
+      fn graph ->
+        Enum.reduce(
+          @buttons,
+          graph,
+          fn obj, graph ->
+            graph
+            |> push_button.(obj, @width, @height, :up, up_color)
+            |> push_button.(obj, @width, @height, :down, down_color)
+          end
+        )
+      end,
+      t: {16 + 60, 140}
+    )
+```
+
+---
+
+## Bread & Butter 3/5
+
+```elixir
+  def filter_event({:click, {_col, _row, direction} = id} = event, _context, state) do
+    graph = toggle_button(id, direction, state.graph)
+    state = Map.put(state, :graph, graph)
+    {:cont, event, state, push: graph}
+  end
+```
+---
+## Bread & Butter 4/5
+ 
+```elixir
+def init(_, _) do
+  Process.send_after(self(), :loop, 5000, [])
+  state =
+    %{ graph: graph,
+      bpm: 90,
+      bpm_in_ms: bpm_to_ms(90),
+      volume: 50,
+      iteration: 0
+    }
+    ...
+end
+```
+
+
+---
+
+## Bread & Butter 5/5
+
+```elixir
+  def handle_info(:loop, %{iteration: iteration, bpm_in_ms: bpm_in_ms} = state) do
+    Process.send_after(self(), :loop, bpm_in_ms)
+    GenServer.cast(StepIndicator, {:loop, iteration})
+    play_active_sounds_for_iteration(iteration)
+    new_state = Map.put(state, :iteration,  rem(iteration + 1, 8))
+    {:noreply, new_state}
+  end
 ```
 
 ---
@@ -246,7 +325,7 @@ end
 ## Optimize CPU usage 3/4
 - Cache pure functions at compile time by generating function heads that return the precalculated value
   - Top 2x faster, 0 mem usage vs 64B
-```
+```elixir
   for n <- 0..100 do
       @str "n is #{n}"
       def volume_string(unquote(n)) do
@@ -255,7 +334,7 @@ end
   end
 ```
 vs
-```
+```elixir
   def volume_string(n) do
     "n is #{n}"
   end
