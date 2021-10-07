@@ -19,12 +19,12 @@ Github: @hassanshaikley
 
 ## Me
 
-- spouse
-- plants
-- food
-- tea
-- games
-- pets
+- Spouse
+- Plants
+- Food
+- Games
+- Pets
+- Community.com
 
 ---
 
@@ -75,14 +75,14 @@ Github: @hassanshaikley
 
 ## Initializing the project
 
-```bash
+
 0. Plug in your SD card
-1. mix scenic.new.nerves rpi_drum_machine_nerves
-2. cd rpi_drum_machine_nerves
-3. export MIX_TARGET=rpi3
-4. mix deps.get
-5. NERVES_SYSTEM=rpi3 mix firmware.burn
-```
+1. `mix scenic.new.nerves rpi_drum_machine_nerves`
+2. `cd rpi_drum_machine_nerves`
+3. `export MIX_TARGET=rpi3`
+4. `mix deps.get`
+5. `NERVES_SYSTEM=rpi3 mix firmware.burn`
+
 
 ---
 
@@ -101,7 +101,7 @@ Github: @hassanshaikley
 
 ## Sound output to jack
 
-`amixer cset numid=3 1'`
+`amixer cset numid=3 1`
 
 `System.cmd("amixer", ["cset", "numid=3", "1"])`
 - 0: automatic

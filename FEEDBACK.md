@@ -1,12 +1,6 @@
-- Show an image of the volume button before talking about creating it
-- Show an image of the end result
-
-
-
 
 -- Consider talking about how I messed around with fluidsynth
 -- consider talking about my tiny mmo
--- consider giving community a shoutout
 
 -- Consider having more random slides with images
 	Whenever you mention something have an image
@@ -16,8 +10,8 @@
 
 -- Mention how you're into Arcade games and want to build one with Nerves one day
 
+-- If I could turn it into a story somehow I think that would be clutch
+
+
+Maybe
 -- Speaker cut out of picture
--- Many pictures are at the very bottom
--- Some text left aligned and some centered
--- Maybe all code should be in ``` blocks better formatting I think
--- Generally boring, needs more entertainment

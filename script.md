@@ -12,6 +12,7 @@ I love to garden, that means hydroponically and in the dirt.
 I love to eat and try different foods.
 I love to tinker; that involves making all sorts of things.
 I have 3 cats and a dog. I take my small chihuahua, Milo, just about everywhere with me.
+I'm a Software Engineer at Community where I work with really talented folks on an amazingly well designed system. We're a fairly young company and we're always hiring, many people from Community are here too. Feel free to reach out to me if you're interested in working with us!
 
 2 - 
 
