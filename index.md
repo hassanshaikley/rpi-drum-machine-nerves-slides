@@ -30,8 +30,27 @@ Github: @hassanshaikley
 
 ## What is a Drum Machine
 
-<!-- ![](img/drum_machine_mine.png) -->
+Drum is hard, button is easy
+
+---
+
+
 ![](img/drum_machine_old.jpg)
+
+<!-- --- -->
+
+
+♫ I wanna dance with somebody ♫ 
+
+♫ When I get that feeling ♫ 
+
+♫ So keep your love lockdown ♫
+
+...and many more!
+
+---
+
+![](img/drum_machine_mine_2.png)
 
 ---
 
@@ -90,20 +109,18 @@ Github: @hassanshaikley
 
 ---
 
-## Spoiler Alert
 
----
-
-![](img/drum_machine_mine_2.png)
-
----
 
 
 ## Sound output to jack
 
-`amixer cset numid=3 1`
-
-`System.cmd("amixer", ["cset", "numid=3", "1"])`
+```bash
+amixer cset numid=3 1
+```
+☝️ terminal command, 👇 Elixir equivalent
+```elixir
+System.cmd("amixer", ["cset", "numid=3", "1"])
+```
 - 0: automatic
 - 1: analog (headphone jack)
 - 2: HDMI
@@ -113,9 +130,13 @@ Github: @hassanshaikley
 
 ## Changing volume
 
-`amixer cset numid=1 #{percent}%`
-
-`System.cmd("amixer", ["cset", "numid=3", "#{percent}%"])`
+```bash
+amixer cset numid=1 #{percent}%
+```
+☝️ terminal command, 👇 Elixir equivalent
+```
+System.cmd("amixer", ["cset", "numid=3", "#{percent}%"])`
+```
 
 ---
 
@@ -132,41 +153,70 @@ Path.join(priv_dir, "static")`
 
 ## Playing an audio file
 
-`aplay -q #{path_to_audio_file}`
+```bash
+aplay -q path/to/audio/file.wav
+```
 
-or
+☝️ terminal command, 👇 Elixir equivalent
 
-`System.cmd("aplay", ["-q", path_to_audio_file])`
+```elixir
+System.cmd("aplay", ["-q", path_to_audio_file])
+```
+
+
+---
+## Primitives & Components
+
+#### Primitives
+
+- Text
+- Rectangle 
+- Triangle
+- etc...
+
+#### Components
+
+- Button
+- Slider
+- Drop Down
+- etc...
+
+---
+## Graph
+
+```elixir
+@graph Scenic.Graph.build()
+|> text("This is some text", translate: {20, 20})
+```
+
+
+![](img/text.png)
+
+
 ---
 
 ## Scenic UI Example 1/4
 
 ![](img/vol2.png)
 
+
 ---
 
 ## Scenic UI Example 2/4
 
 ```elixir
-  @graph Graph.build(font: :roboto_mono, font_size: 16)
-         |> group(
-           fn graph ->
-             graph
-             |> button("-",
-               theme: %{
-                 text: :white,
-                 background: {100, 100, 100},
-                 active: {100, 200, 100},
-                 border: :black
-               },
-               id: :volume_down,
-               t: {40, -10 + 80},
-               height: 70,
-               width: 70
-             )
-           end,
-           t: {630, 300}
-         )
+    button(graph, "-",
+      theme: %{
+        text: :white,
+        background: {100, 100, 100}, # rgb 100, 100, 100
+        active: {100, 200, 100}, # rgb 100, 200, 100 when pressed
+        border: :black
+      },
+      id: :volume_down, # id, like an html id
+      t: {40, 70}, # The position
+      height: 70,
+      width: 70
+    )
 ```
 ---
 
