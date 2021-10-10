@@ -84,12 +84,11 @@ Drum is hard, button is easy
 
 ## Hardware
 
-- RPI3
-- Official 7" Touchscreen
-- Audio Jack Mic
-- Power Supply
-	- 5.25V / 3A 
-- Micro SD Card
+<img src="/img/rpi3b.jpeg" style="width: 30%; padding: 10px"/>
+<img src="/img/powersupply.png" style="width: 30%; padding: 10px" />
+<img src="/img/speaker.jpg" style="width: 30%; padding: 10px" />
+<img src="/img/microsdcard.png" style="width: 30%; padding: 10px" />
+<img src="/img/7in.jpeg" style="width: 30%; padding: 10px" />
 
 ---
 
@@ -99,11 +98,10 @@ Drum is hard, button is easy
 
 ## Software
 
-- Nerves
-	- aplay (ships with nerves), afplay (local to mac)
 - Scenic
-	- Supports cross platform compilation of UI
-	- Has an RPI Driver
+- fluidsynth ?
+
+
 
 ---
 
@@ -120,79 +118,12 @@ Drum is hard, button is easy
 
 ---
 
-## Initializing the project
-
-
-0. Plug in your SD card
-1. `mix scenic.new.nerves rpi_drum_machine_nerves`
-2. `cd rpi_drum_machine_nerves`
-3. `export MIX_TARGET=rpi3`
-4. `mix deps.get`
-5. `NERVES_SYSTEM=rpi3 mix firmware.burn`
-
-
----
-
 ![](img/scenic_starter.png)
 
----
-
-
-
-
-## Sound output to jack
-
-```bash
-amixer cset numid=3 1
-```
-☝️ terminal command, 👇 Elixir equivalent
-```elixir
-System.cmd("amixer", ["cset", "numid=3", "1"])
-```
-- 0: automatic
-- 1: analog (headphone jack)
-- 2: HDMI
-- 3: None 
 
 ---
 
-## Changing volume
 
-```bash
-amixer cset numid=1 #{percent}%
-```
-☝️ terminal command, 👇 Elixir equivalent
-```
-System.cmd("amixer", ["cset", "numid=3", "#{percent}%"])`
-```
-
----
-
-## Using static assets
-
-put wav files in `priv/static` 
-accessible at
-```elixir
-priv_dir = :code.priv_dir(:rpi_drum_machine_nerves)
-Path.join(priv_dir, "static")`
-```
-
----
-
-## Playing an audio file
-
-```bash
-aplay -q path/to/audio/file.wav
-```
-
-☝️ terminal command, 👇 Elixir equivalent
-
-```elixir
-System.cmd("aplay", ["-q", path_to_audio_file])
-```
-
-
----
 ## Primitives & Components
 
 #### Primitives
@@ -221,12 +152,17 @@ System.cmd("aplay", ["-q", path_to_audio_file])
 
 ![](img/text.png)
 
+---
+
+## Header
+
+![](img/header.png)
 
 ---
 
 ## Scenic UI Example 1/4
 
-![](img/vol2.png)
+![](img/vol_controls.png)
 
 
 ---
@@ -235,12 +171,7 @@ System.cmd("aplay", ["-q", path_to_audio_file])
 
 ```elixir
     button(graph, "-",
-      theme: %{
-        text: :white,
-        background: {100, 100, 100}, # rgb 100, 100, 100
-        active: {100, 200, 100}, # rgb 100, 200, 100 when pressed
-        border: :black
-      },
+      theme: %{...} # map containing the style
       id: :volume_down, # id, like an html id
       t: {40, 70}, # The position
       height: 70,
@@ -272,149 +203,53 @@ root_graph
 
 ---
 
-## Events & Communicating between components 1/4
+## Beat Indicator
 
-```elixir
- def child_spec({args, opts}) do
-   # name allows us to communicate via the name
-   start_opts = [__MODULE__, args, Keyword.put_new(opts, :name, __MODULE__)]
-   %{
-     id: make_ref(),
-     # important bit 👇
-     start:
-       {Scenic.Scene, :start_link, start_opts},
-     type: :worker,
-     restart: :permanent,
-     shutdown: 500
-   }
- end
-```
----
-
-## Events & Communicating between components 2/4
-
-```elixir
-def filter_event({:click, element_id}, _context, state) do
-
-end
-```
----
-
-## Events & Communicating between components 3/4
-
-In the root component where we want to send messages
-
-```elixir
-  alias RpiDrumMachineNerves.Components.VolumeControls
-  ...
-  def filter_event({:click, :volume_down}, _context, state) do
-    new_volume = decrease_volume(state.volume)
-    GenServer.cast(VolumeControls, {:update_volume, new_volume})
-    new_state = Map.put(state, :volume, new_volume)
-    {:noreply, new_state}
-  end
-```
----
-
-## Events & Communicating between components 4/4
-
-In the component we want to receive messages from
-
-```elixir
-def handle_cast({:update_volume, new_volume}, state) do
-  vol = Integer.to_string(new_volume)
-  graph = Graph.modify(state.graph, :volume_label, &text(&1, vol))
-  {:noreply, state, push: graph}
-end
-```
-
----
-
-## Bread & Butter 1/5
-
-```elixir
-# List of tuples of {translation_x, translation_y, {x, y} = _id}
-@buttons Enum.map(0..(@num_cols - 1), fn x ->
-            Enum.map(0..(@num_rows - 1), fn y ->
-              {
-                (@width + @padding) * x, 
-                (@height + @padding) * y,
-                {x, y}
-              }
-            end)
-          end)
-          |> List.flatten()
-```
-
----
-
-## Bread & Butter 2/5
-```elixir
-  @graph Graph.build()
-    |> group(
-      fn graph ->
-        Enum.reduce(
-          @buttons,
-          graph,
-          fn obj, graph ->
-            graph
-            |> push_button.(obj, :up)
-            |> push_button.(obj, :down)
-          end
-        )
-      end,
-      t: {16 + 60, 140}
-    )
-```
-
----
-
-## Bread & Butter 3/5
-
-```elixir
-  def filter_event({:click, {_col, _row, direction} = id} = event, _context, state) do
-    graph = toggle_button(id, direction, state.graph)
-    state = Map.put(state, :graph, graph)
-    {:cont, event, state, push: graph}
-  end
-```
----
-## Bread & Butter 4/5
- 
-```elixir
-def init(_, _) do
-  Process.send_after(self(), :loop, 5000, [])
-  state =
-    %{ graph: graph,
-      bpm: 90,
-      beat_length_in_ms: bpm_to_ms(90),
-      volume: 50,
-      iteration: 0
-    }
-    ...
-end
-```
+![](img/stepindicator.png)
 
 
 ---
 
-## Bread & Butter 5/5
+## Control Panel
 
-```elixir
-  def handle_info(:loop, %{iteration: iteration, beat_length_in_ms: beat_length_in_ms} = state) do
-    Process.send_after(self(), :loop, beat_length_in_ms)
-    GenServer.cast(StepIndicator, {:loop, iteration})
-    play_active_sounds_for_iteration(iteration)
-    new_state = Map.put(state, :iteration,  rem(iteration + 1, 8))
-    {:noreply, new_state}
-  end
-```
+
+![](img/cpane.png)
+
 
 ---
 
-## Optimize CPU usage 1/6
+## Bread & Butter 1/2
 
-- Benchee
+The loop.
+
+  - Process.send_after(self(), :loop, next_loop_milliseconds)
+  - Play active audio
+  - Let other components know a loop occured so they can update their UI
+  
+
+---
+
+## Bread & Butter 2/2
+
+Microtimer
+
+---
+## Events & Communicating between components 1/2
+
+- Component is a specialized Scene
+- Scene is a specialized Genserver
+---
+
+## Events & Communicating between components 2/2
+
+![](img/boots01.png)
+
+
+
+---
+## Optimize CPU usage 1/5
+
+Benchee
 
 ```
 ...
@@ -425,46 +260,38 @@ map.flatten        1.18 K      844.08 μs    ±19.73%      778.10 μs     1314.8
 
 Comparison:
 flat_map           2.34 K
-map.flatten        1.18 K - 1.98x slower +417.24 μs
+map.flatten        1.18 K - 👉 1.98x slower +417.24 μs 👈
 
 Memory usage statistics:
 
 Name           Memory usage
 flat_map          624.97 KB
-map.flatten       781.25 KB - 1.25x memory usage +156.28 KB
+map.flatten       781.25 KB - 👉 1.25x memory usage +156.28 KB 👈
 ```
 
 ---
 
-## Optimize CPU usage 2/6
+## Optimize CPU usage 2/5
 
-- Follow performance best practices
-	- ie: Matching atoms is faster than strings
-		- use atom id's
-	- a <> b is faster than "#{a}#{b} 
-		- Matching is faster than <>
-	- === barely faster than ==
+Follow best practices
+
+- a <> b is faster than "#{a}#{b} 
+- === barely faster than ==
 
 ---
 
-## Optimize CPU usage 3/6
-- Tried using ETS but it wasn't fast enough; there are some optimizations I still need to try
+## Optimize CPU usage 3/5
+- ets vs genserver state
 
 ---
 
-## Optimize CPU usage 4/6
-
-- Leverage the 4 cores on the rpi3
-
----
-
-## Optimize CPU usage 5/6
+## Optimize CPU usage 4/5
 
 - Cache pure functions at compile time by generating function heads that return the precalculated value
   - Top 2x faster, 0 mem usage vs 64B
 ```elixir
   for n <- 0..100 do
-      @str "n is #{n}"
+      @str "volume is #{n}"
       def volume_string(unquote(n)) do
         @str
       end
@@ -473,7 +300,7 @@ map.flatten       781.25 KB - 1.25x memory usage +156.28 KB
 vs
 ```elixir
   def volume_string(n) do
-    "n is #{n}"
+    "volume is #{n}"
   end
 ```
 Thank you Bryan Joseph for helping me accomplish this
@@ -482,7 +309,7 @@ Thank you Bryan Joseph for helping me accomplish this
 
 ```elixir
     for n <- 0..100 do
-        @str "n is #{n}"
+        @str "volume is #{n}"
         def volume_string(unquote(n)) do
           @str
         end
@@ -491,31 +318,35 @@ Thank you Bryan Joseph for helping me accomplish this
 ☝️ Generates👇
 ```elixir
     def volume_string(0) do
-      "n is 0"
+      "volume is 0"
     end
-    def volume_string(0) do
-      "n is 1"
+    def volume_string(1) do
+      "volume is 1"
     end
-    def volume_string(0) do
-      "n is 2"
+    def volume_string(2) do
+      "volume is 2"
     end
     ...
-    def volume_string(0) do
-      "n is 3"
+    def volume_string(100) do
+      "volume is 100"
     end
 ```
 And ☝️ is 2-3x faster than 👇
 ```elixir
-    def volume_string(n), do: "n is #{n}"
-
-    def volume_string(n), do: "n is " <> to_string(n)
+    def volume_string(n), do: "volume is #{n}"
+```
+and
+```elixir
+    def volume_string(n), do: "volume is " <> to_string(n)
 ```
 ---
 
-## Optimize CPU usage 6/6
+## Optimize CPU usage 5/5
 
 - nifs
 ![](img/great_power.jpeg)
+
+"With great power comes great responsibility" - Uncle Ben, Spider-Man (2002)
 
 ---
 
@@ -528,14 +359,6 @@ And ☝️ is 2-3x faster than 👇
 	- leds
 	- usbs
 	- https://github.com/cjfreeze/power_control is a great library for this
-
----
-
-## Don't optimize memory
-
-- Leverage memory to decrease CPU usage where you can
-  - RPI3A's have 512mb
-  - RPI3B's have 1GB
 
 ---
 
