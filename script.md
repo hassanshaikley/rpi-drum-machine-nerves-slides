@@ -4,28 +4,48 @@ Slides
 
 Hey everyone, my name is Hassan Khan Shaikley and I am here to talk to you about building a drum machine with Nerves.
 
+--
+
+
 1 - ME
 
 So, about me:
 I've been married for almost 5 years to the most incredible woman I have ever met.
-I love to garden, that means hydroponically and in the dirt.
+I love to garden.
 I love to eat and try different foods.
-I love to tinker; that involves making all sorts of things.
+I love to tinker.
 I have 3 cats and a dog. I take my small chihuahua, Milo, just about everywhere with me.
+And I'm a Software Engineer @ Community.com where I work among some really talented and humble people. Please ask me anything about Community if you're interested in working with us!
 
-I'm a Software Engineer at Community where I work with really talented folks on an amazingly well designed system. We're a fairly young company and we're always hiring, many people from Community are here too. Feel free to reach out to me if you're interested in working with us!
+
+
+DRUM MACHINE
+
+In this talk I'll be going over what a drum machine is, why we might want to make one and how we can build one with Nerves & Scenic.
 
 2 - 
 
 So let's get started.
 
 A drum machine is a programmable device that is able to imitate the sound of a drum kit.
-With a drum machine, you aren't limited to preset patterns, you can create your own!
+With a drum machine, you aren't limited to preset patterns you can create your own!
 There are different UIs such as this one:
-The tr808 shown here; 
-The row represents the beat. Select a sound like kickdrum, snare, or what have you, and press the button corresponding to the beat. The drum machine will loop and if the button is toggled it will play the sound.
+
+-
+
+The tr808 shown here, manufactured between 1980 and 1983 yet  a total gamechanger in the world of music production.
+The row represents the beat. Select a sound like kickdrum and press the button corresponding to the beat. The drum machine will loop over each of those columns and if the button is toggled it will play the sound.
 Once you have finished setting up one percussion instrument you can move on to the next.
 
+-
+If you recognize any of these songs you've heard music produced on a tr808 drum machine. I'm lying, you've probably heard a tr808 this week either directly or through a sample. The reach of this device is phenomenal. 
+
+-
+
+This is the drum machine I built.
+
+
+-
 
 3 - 
 The hardware I chose to use to build the drum machine is
@@ -98,6 +118,11 @@ We can pass these file locations as arguments to aplay to play our audio files.
 PLAYING AN AUDIO FILE
 
 The default Nerves config for the rpi3 ships with aplay, a utility for playing audio files. Just run this command and you’ve got your audio file playing.
+
+PRIMITIVES AND COMPONENTS
+
+TODO: SEE WHICH CAN HANDLE CLICK EVENTSs
+
 
 SCENIC UI EXAMPLE
 
@@ -272,6 +297,8 @@ Robotic arms would be awesome.
 Accurate timing is really important. Mat Trudel explores that in his talk Mix New Beats. He uses a library called Schedex to time the sounds. If I was building the perfect drum machine I would explore using that.
 
 fluidsynth allows you to play midi files, it isn't bundled with nerves by default but you can make a custom nerves build that includes it. I experimented with this a little bit but didn't have the time to fully do it. I see it as a huge improvement to wav files because midi is more flexible, has a smaller footprint, and allows you to play different intruments with ease.
+
+---
 
 QUESTIONS
 

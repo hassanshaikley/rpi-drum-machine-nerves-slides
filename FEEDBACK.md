@@ -33,3 +33,13 @@ General Tips
 - Humanize things
 - IT is a little dy
 - Think about the goal and ask yourself if things accomplish the goal
+
+- Maybe discuss the entire arhcitecture how it all comes together
+- Talk about how timing is hard
+- Talk about sox vs afplay
+- Talk about how many issues are version related when working in this space
+
+
+SONG IDEAS;
+Sunflower , post malone
+

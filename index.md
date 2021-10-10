@@ -17,6 +17,11 @@ Github: @hassanshaikley
 
 ---
 
+### Software Engineer @ Community.com
+
+We're hiring!
+---
+
 ## Me
 
 - Spouse
@@ -24,7 +29,16 @@ Github: @hassanshaikley
 - Food
 - Games
 - Pets
-- Community.com
+- Community
+
+
+---
+
+## Drum Machine ?
+
+- What
+- Why 
+- How
 
 ---
 
@@ -37,6 +51,10 @@ Drum is hard, button is easy
 
 ![](img/drum_machine_old.jpg)
 
+"My heart's beating like an 808" - Britney Spears
+
+---
+
 <!-- --- -->
 
 
@@ -46,11 +64,21 @@ Drum is hard, button is easy
 
 ♫ So keep your love lockdown ♫
 
-...and many more!
+♫ I love the way you move ♫
+
+♫ Music makes you lose control ♫ 
+
+♫ Beat it ♫
+
+
 
 ---
 
-![](img/drum_machine_mine_2.png)
+![](img/my_drum_machine.png)
+
+---
+
+![](img/boots_cats.gif)
 
 ---
 
@@ -171,8 +199,9 @@ System.cmd("aplay", ["-q", path_to_audio_file])
 
 - Text
 - Rectangle 
-- Triangle
+- Image
 - etc...
+
 
 #### Components
 
@@ -243,7 +272,7 @@ root_graph
 
 ---
 
-## Events & Communicating between components 1/3
+## Events & Communicating between components 1/4
 
 ```elixir
  def child_spec({args, opts}) do
@@ -260,10 +289,18 @@ root_graph
    }
  end
 ```
-
 ---
 
-## Events & Communicating between components 2/3
+## Events & Communicating between components 2/4
+
+```elixir
+def filter_event({:click, element_id}, _context, state) do
+
+end
+```
+---
+
+## Events & Communicating between components 3/4
 
 In the root component where we want to send messages
 
@@ -271,14 +308,15 @@ In the root component where we want to send messages
   alias RpiDrumMachineNerves.Components.VolumeControls
   ...
   def filter_event({:click, :volume_down}, _context, state) do
-    new_state = decrease_volume(state)
-    GenServer.cast(VolumeControls, {:update_volume, new_state.volume})
+    new_volume = decrease_volume(state.volume)
+    GenServer.cast(VolumeControls, {:update_volume, new_volume})
+    new_state = Map.put(state, :volume, new_volume)
     {:noreply, new_state}
   end
 ```
 ---
 
-## Events & Communicating between components 3/3
+## Events & Communicating between components 4/4
 
 In the component we want to receive messages from
 
@@ -349,7 +387,7 @@ def init(_, _) do
   state =
     %{ graph: graph,
       bpm: 90,
-      bpm_in_ms: bpm_to_ms(90),
+      beat_length_in_ms: bpm_to_ms(90),
       volume: 50,
       iteration: 0
     }
@@ -363,8 +401,8 @@ end
 ## Bread & Butter 5/5
 
 ```elixir
-  def handle_info(:loop, %{iteration: iteration, bpm_in_ms: bpm_in_ms} = state) do
-    Process.send_after(self(), :loop, bpm_in_ms)
+  def handle_info(:loop, %{iteration: iteration, beat_length_in_ms: beat_length_in_ms} = state) do
+    Process.send_after(self(), :loop, beat_length_in_ms)
     GenServer.cast(StepIndicator, {:loop, iteration})
     play_active_sounds_for_iteration(iteration)
     new_state = Map.put(state, :iteration,  rem(iteration + 1, 8))
@@ -374,25 +412,54 @@ end
 
 ---
 
-## Optimize CPU usage 1/4
+## Optimize CPU usage 1/6
 
 - Benchee
+
+```
+...
+
+Name                  ips        average  deviation         median         99th %
+flat_map           2.34 K      426.84 μs     ±9.88%      418.72 μs      720.20 μs
+map.flatten        1.18 K      844.08 μs    ±19.73%      778.10 μs     1314.87 μs
+
+Comparison:
+flat_map           2.34 K
+map.flatten        1.18 K - 1.98x slower +417.24 μs
+
+Memory usage statistics:
+
+Name           Memory usage
+flat_map          624.97 KB
+map.flatten       781.25 KB - 1.25x memory usage +156.28 KB
+```
+
+---
+
+## Optimize CPU usage 2/6
+
 - Follow performance best practices
 	- ie: Matching atoms is faster than strings
 		- use atom id's
-	- a <> b 3x faster than "#{a}#{b} 
-		- Matching is 3x faster than <>
+	- a <> b is faster than "#{a}#{b} 
+		- Matching is faster than <>
 	- === barely faster than ==
 
 ---
 
-## Optimize CPU usage 2/4
+## Optimize CPU usage 3/6
 - Tried using ETS but it wasn't fast enough; there are some optimizations I still need to try
+
+---
+
+## Optimize CPU usage 4/6
+
 - Leverage the 4 cores on the rpi3
 
 ---
 
-## Optimize CPU usage 3/4
+## Optimize CPU usage 5/6
+
 - Cache pure functions at compile time by generating function heads that return the precalculated value
   - Top 2x faster, 0 mem usage vs 64B
 ```elixir
@@ -437,15 +504,15 @@ Thank you Bryan Joseph for helping me accomplish this
       "n is 3"
     end
 ```
-And ☝️ is faster than 👇
+And ☝️ is 2-3x faster than 👇
 ```elixir
-    def volume_string(n) do
-      "n is #{n}"
-    end
+    def volume_string(n), do: "n is #{n}"
+
+    def volume_string(n), do: "n is " <> to_string(n)
 ```
 ---
 
-## Optimize CPU usage 4/4
+## Optimize CPU usage 6/6
 
 - nifs
 ![](img/great_power.jpeg)
@@ -454,6 +521,8 @@ And ☝️ is faster than 👇
 
 ## Optimize power consumption
 
+- Better power supply
+  - I use a 5.2V / 3A
 - Disable what you don't need
 	- ethernet
 	- leds
@@ -476,6 +545,12 @@ And ☝️ is faster than 👇
 - More accurate timing 
   - mix new beats talk by Mat Trudel explores this
 - fluidysynth & fhunleth/midi_synth
+
+---
+
+# In Conclusion
+
+It's not just possible to make an amazing drum machine with Nerves, it's a great tool for the job.
 
 ---
 
