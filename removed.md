@@ -143,3 +143,19 @@ Path.join(priv_dir, "static")`
 ```
 
 ---
+
+
+
+
+Many would say Elixir isn't well suited for applications that have strong timing requirements. In a sense they're right. Process.send_after is  not good if you care about the time when it is executed. Your ear might detect a delay when the BPM gets high and good music gets really bad really fast if the timing is off
+
+
+
+ACTUALLY MAKING SOUNDS
+
+There's an amazing tool called fluidsynth that allows you to play midi files. Midi has a small footprint, is great quality, is interoperable and allows for many insturments not just drums.
+
+
+But midi was great. Frank hunthless has an elixir adapter for fluidsynth called midi synth.
+
+It isn't bundled with nerves so I created a custom nerves system that included it. This part was really fun.

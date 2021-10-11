@@ -1,5 +1,3 @@
-
--- Consider talking about how I messed around with fluidsynth
 -- Consider having more random slides with images
 	Whenever you mention something have an image
 
@@ -36,16 +34,12 @@ General Tips
 
 - Maybe discuss the entire arhcitecture how it all comes together
 - Talk about how timing is hard
-- Talk about sox vs afplay
 - Talk about how many issues are version related when working in this space
 - Find sounds to sync to
 - GO BACK TO PLAYING AUDIO FILE SLIDE
-
-- Maybe use the freeze power lib
 
 - If it can be communicated in an image, use an image
 
 SONG IDEAS;
 Sunflower , post malone
 
-- Beat it is fully aligned at 20s ? 

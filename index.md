@@ -8,7 +8,7 @@ template: template.html
 
 ## How to Build a Touch-Screen Drum Machine with Nerves
 
-#### Hassan Khan-Shaikley
+#### Hassan Shaikley
 
 <small>
 Twitter: @hassanshaikley &nbsp;
@@ -24,7 +24,6 @@ We're hiring!
 
 ## Me
 
-- Spouse
 - Plants
 - Food
 - Games
@@ -99,8 +98,8 @@ Drum is hard, button is easy
 ## Software
 
 - Scenic
-- fluidsynth ?
-
+- midi_synth
+- nerves_system_rpi3_fluidsynth
 
 
 ---
@@ -160,14 +159,14 @@ Drum is hard, button is easy
 
 ---
 
-## Scenic UI Example 1/4
+## Scenic UI Example 1/5
 
 ![](img/vol_controls.png)
 
 
 ---
 
-## Scenic UI Example 2/4
+## Scenic UI Example 2/5
 
 ```elixir
     button(graph, "-",
@@ -180,7 +179,7 @@ Drum is hard, button is easy
 ```
 ---
 
-## Scenic UI Example 3/4
+## Scenic UI Example 3/5
 
 ```elixir
 def init(_, _opts) do
@@ -194,7 +193,14 @@ end
 
 ---
 
-## Scenic UI Example 4/4
+## Scenic UI Example 4/5
+
+```elixir
+def filter_event({:click, :volume_down}, _context, state) do
+```
+---
+
+## Scenic UI Example 5/5
 
 ```elixir
 root_graph
@@ -218,9 +224,7 @@ root_graph
 
 ---
 
-## Bread & Butter 1/2
-
-The loop.
+## The Loop 1/2
 
   - Process.send_after(self(), :loop, next_loop_milliseconds)
   - Play active audio
@@ -229,9 +233,9 @@ The loop.
 
 ---
 
-## Bread & Butter 2/2
+## The Loop 2/2
 
-Microtimer
+<p style="color: red; font-style: italic">Alert!</p>
 
 ---
 ## Events & Communicating between components 1/2
@@ -244,48 +248,14 @@ Microtimer
 
 ![](img/boots01.png)
 
-
-
 ---
-## Optimize CPU usage 1/5
+## Optimize CPU usage 1/3
 
-Benchee
-
-```
-...
-
-Name                  ips        average  deviation         median         99th %
-flat_map           2.34 K      426.84 μs     ±9.88%      418.72 μs      720.20 μs
-map.flatten        1.18 K      844.08 μs    ±19.73%      778.10 μs     1314.87 μs
-
-Comparison:
-flat_map           2.34 K
-map.flatten        1.18 K - 👉 1.98x slower +417.24 μs 👈
-
-Memory usage statistics:
-
-Name           Memory usage
-flat_map          624.97 KB
-map.flatten       781.25 KB - 👉 1.25x memory usage +156.28 KB 👈
-```
-
+- Benchmark
+- Follow best practices
 ---
 
-## Optimize CPU usage 2/5
-
-Follow best practices
-
-- a <> b is faster than "#{a}#{b} 
-- === barely faster than ==
-
----
-
-## Optimize CPU usage 3/5
-- ets vs genserver state
-
----
-
-## Optimize CPU usage 4/5
+## Optimize CPU usage 2/3
 
 - Cache pure functions at compile time by generating function heads that return the precalculated value
   - Top 2x faster, 0 mem usage vs 64B
@@ -341,7 +311,7 @@ and
 ```
 ---
 
-## Optimize CPU usage 5/5
+## Optimize CPU usage 3/3
 
 - nifs
 ![](img/great_power.jpeg)
@@ -350,35 +320,27 @@ and
 
 ---
 
-## Optimize power consumption
-
-- Better power supply
-  - I use a 5.2V / 3A
-- Disable what you don't need
-	- ethernet
-	- leds
-	- usbs
-	- https://github.com/cjfreeze/power_control is a great library for this
-
----
-
 # Potential improvements
 
 - Robotic arms
-- More accurate timing 
-  - mix new beats talk by Mat Trudel explores this
-- fluidysynth & fhunleth/midi_synth
-
+- SchedEx
 ---
 
 # In Conclusion
 
-It's not just possible to make an amazing drum machine with Nerves, it's a great tool for the job.
+
+<img src="img/1404231.png" ></img>
+
+
+---
+
+# Demo
+
+- It's from my macbook not a raspberry pi sorry
 
 ---
 
 ## Questions
 
-source: github.com/hassanshaikley/rpi-drum-machine-nerves
 
 
